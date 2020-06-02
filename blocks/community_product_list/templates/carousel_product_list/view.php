@@ -22,7 +22,7 @@ if ($productsPerRow == 3) {
 }
 
 if ($productsPerRow == 4) {
-    $columnClass = 'col-md-3';
+    $columnClass = 'col-12 col-md-4';
 }
 
 if ($productsPerRow == 6) {
@@ -30,72 +30,6 @@ if ($productsPerRow == 6) {
 }
 
 ?>
-
-<style>
-    @media (min-width: 768px) {
-
-        /* show 3 items */
-        .carousel-inner .active,
-        .carousel-inner .active+.carousel-item,
-        .carousel-inner .active+.carousel-item+.carousel-item {
-            display: block;
-        }
-
-        .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left),
-        .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left)+.carousel-item,
-        .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left)+.carousel-item+.carousel-item {
-            transition: none;
-        }
-
-        .carousel-inner .carousel-item-next,
-        .carousel-inner .carousel-item-prev {
-            position: relative;
-            transform: translate3d(0, 0, 0);
-        }
-
-        .carousel-inner .active.carousel-item+.carousel-item+.carousel-item+.carousel-item {
-            position: absolute;
-            top: 0;
-            right: -33.3333%;
-            z-index: -1;
-            display: block;
-            visibility: visible;
-        }
-
-        /* left or forward direction */
-        .active.carousel-item-left+.carousel-item-next.carousel-item-left,
-        .carousel-item-next.carousel-item-left+.carousel-item,
-        .carousel-item-next.carousel-item-left+.carousel-item+.carousel-item,
-        .carousel-item-next.carousel-item-left+.carousel-item+.carousel-item+.carousel-item {
-            position: relative;
-            transform: translate3d(-100%, 0, 0);
-            visibility: visible;
-        }
-
-        /* farthest right hidden item must be abso position for animations */
-        .carousel-inner .carousel-item-prev.carousel-item-right {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            display: block;
-            visibility: visible;
-        }
-
-        /* right or prev direction */
-        .active.carousel-item-right+.carousel-item-prev.carousel-item-right,
-        .carousel-item-prev.carousel-item-right+.carousel-item,
-        .carousel-item-prev.carousel-item-right+.carousel-item+.carousel-item,
-        .carousel-item-prev.carousel-item-right+.carousel-item+.carousel-item+.carousel-item {
-            position: relative;
-            transform: translate3d(100%, 0, 0);
-            visibility: visible;
-            display: block;
-            visibility: visible;
-        }
-
-    }
-</style>
 
 <div class="carousel-product-list-wrapper">
     <div class="container">
@@ -128,7 +62,7 @@ if ($productsPerRow == 6) {
                     </script>
                 <?php } ?>
 
-                <div id="productistCarousel" class="carousel slide" data-ride="carousel" data-interval="12000">
+                <div id="productistCarousel" class="carousel slide multi-item-carousel" data-ride="carousel" data-interval="12000">
                     <div class="carousel-inner w-100 mx-auto flex-nowrap store-product-list row store-product-list-per-row-<?= $productsPerRow ?>" role="listbox">
 
                         <?php
@@ -477,22 +411,17 @@ if ($productsPerRow == 6) {
 
                 <script>
                     jQuery(function($) {
-                        $('#productistCarousel').on('slide.bs.carousel', function(e) {
-
-                            var $e = $(e.relatedTarget);
-                            var idx = $e.index();
-                            var itemsPerSlide = 4;
-                            var totalItems = $('.carousel-item').length;
-
-                            if (idx >= totalItems - (itemsPerSlide - 1)) {
-                                var it = itemsPerSlide - (totalItems - idx);
+                        $('.multi-item-carousel').on('slide.bs.carousel', function(e) {
+                            var $e = $(e.relatedTarget),
+                                itemsPerSlide = 3,
+                                totalItems = $('.carousel-item', this).length,
+                                $itemsContainer = $('.carousel-inner', this),
+                                it = itemsPerSlide - (totalItems - $e.index());
+                            if (it > 0) {
                                 for (var i = 0; i < it; i++) {
-                                    // append slides to end
-                                    if (e.direction == "left") {
-                                        $('.carousel-item').eq(i).appendTo('.carousel-inner');
-                                    } else {
-                                        $('.carousel-item').eq(0).appendTo('.carousel-inner');
-                                    }
+                                    $('.carousel-item', this).eq(e.direction == "left" ? i : 0).
+                                    // append slides to the end/beginning
+                                    appendTo($itemsContainer);
                                 }
                             }
                         });
