@@ -64,47 +64,47 @@ if ($productsPerRow == 6) {
 
                 <div id="productistCarousel" class="carousel slide" data-ride="carousel" data-interval="12000">
                     <div class="carousel-inner w-100 mx-auto flex-nowrap store-product-list row store-product-list-per-row-<?= $productsPerRow ?>" role="listbox">
-    
+
                         <?php
                         $i = 1;
                         $itemActive = true;
 
                         foreach ($products as $product) {
                             $options = $product->getOptions();
-    
+
                             $variationLookup = $product->getVariationLookup();
                             $variationData = $product->getVariationData();
                             $availableOptionsids = $variationData['availableOptionsids'];
                             $firstAvailableVariation = $variationData['firstAvailableVariation'];
-    
+
                             if ($firstAvailableVariation) {
                                 $product = $firstAvailableVariation;
                             } else {
                                 $product->setInitialVariation();
                             }
-    
+
                             $product->setPriceAdjustment($variationData['priceAdjustment']);
-    
+
                             $isSellable = $product->isSellable();
-    
+
                             //this is done so we can get a type of active class if there's a product list on the product page
                             if ($c->getCollectionID() == $product->getPageID()) {
                                 $activeclass = 'on-product-page';
                             }
-    
+
                             $productPage = $product->getProductPage();
-    
+
                             if (!$productPage || $productPage->isError() || $productPage->isInTrash()) {
                                 $productPage = false;
                             } ?>
-    
-                            <div class="store-product-list-item <?= $columnClass; ?> <?= $activeclass; ?> <?= $itemActive ? 'active' : '' ?>">
+
+                            <div class="carousel-item store-product-list-item <?= $columnClass; ?> <?= $activeclass; ?> <?= $itemActive ? 'active' : '' ?>">
                                 <form id="store-form-add-to-cart-list-<?= $product->getID(); ?>" data-product-id="<?= $product->getID(); ?>">
                                     <?= $token->output('community_store'); ?>
                                     <?php if ($showName) { ?>
                                         <h2 class="store-product-list-name"><?= $csm->t($product->getName(), 'productName', $product->getID()); ?></h2>
                                     <?php } ?>
-    
+
                                     <?php
                                     $imgObj = $product->getImageObj();
                                     if (is_object($imgObj)) {
@@ -145,7 +145,7 @@ if ($productsPerRow == 6) {
                                             ?>
                                         </p>
                                     <?php } ?>
-    
+
                                     <?php if ($product->allowCustomerPrice()) { ?>
                                         <div class="store-product-customer-price-entry form-group">
                                             <?php
@@ -174,7 +174,7 @@ if ($productsPerRow == 6) {
                                                     if (!is_null($min)) {
                                                         echo t('minimum') . ' ' . Config::get('community_store.symbol') . $min;
                                                     }
-    
+
                                                     if (!is_null($max)) {
                                                         if ($min >= 0) {
                                                             echo ', ';
@@ -186,8 +186,8 @@ if ($productsPerRow == 6) {
                                             <?php } ?>
                                         </div>
                                     <?php } ?>
-    
-    
+
+
                                     <?php if ($showDescription) { ?>
                                         <div class="store-product-list-description"><?= $csm->t($product->getDesc(), 'productDescription', $product->getID()); ?></div>
                                     <?php } ?>
@@ -199,30 +199,30 @@ if ($productsPerRow == 6) {
                                             <?php if ($product->allowQuantity() && $showQuantity) { ?>
                                                 <div class="store-product-quantity form-group">
                                                     <label class="store-product-option-group-label"><?= t('Quantity'); ?></label>
-    
+
                                                     <?php $quantityLabel = $csm->t($product->getQtyLabel(), 'productQuantityLabel', $product->getID()); ?>
-    
+
                                                     <?php if ($quantityLabel) { ?>
                                                         <div class="input-group">
                                                         <?php } ?>
                                                         <?php $max = $product->getMaxCartQty(); ?>
-    
+
                                                         <?php if ($product->allowDecimalQuantity()) { ?>
                                                             <input type="number" name="quantity" class="store-product-qty form-control" min="<?= $product->getQtySteps() ? $product->getQtySteps() : 0.001; ?>" step="<?= $product->getQtySteps() ? $product->getQtySteps() : 0.001; ?>" <?= ($max ? 'max="' . $max . '"' : ''); ?>>
                                                         <?php } else { ?>
                                                             <input type="number" name="quantity" class="store-product-qty form-control" value="1" min="1" step="1" <?= ($max ? 'max="' . $max . '"' : ''); ?>>
                                                         <?php } ?>
-    
+
                                                         <?php if ($quantityLabel) { ?>
                                                             <div class="input-group-addon"><?= $quantityLabel; ?></div>
                                                         </div>
                                                     <?php } ?>
-    
+
                                                 </div>
                                             <?php } else { ?>
                                                 <input type="hidden" name="quantity" class="store-product-qty" value="1">
                                             <?php } ?>
-    
+
                                             <?php
                                             foreach ($product->getOptions() as $option) {
                                                 $optionItems = $option->getOptionItems();
@@ -230,22 +230,22 @@ if ($productsPerRow == 6) {
                                                 $required = $option->getRequired();
                                                 $displayType = $option->getDisplayType();
                                                 $details = $option->getDetails();
-    
+
                                                 $requiredAttr = '';
-    
+
                                                 if ($required) {
                                                     $requiredAttr = ' required="required" placeholder="' . t('Required') . '" ';
                                                 }
                                             ?>
-    
+
                                                 <?php if (!$optionType || $optionType == 'select') { ?>
                                                     <div class="store-product-option-group form-group <?= $option->getHandle(); ?>">
                                                         <label class="store-product-option-group-label"><?= h($csm->t($option->getName(), 'optionName', $product->getID(), $option->getID())); ?></label>
-    
+
                                                         <?php if ($details) { ?>
                                                             <span class="store-product-option-help-text help-block"><?= h($csm->t($details, 'optionDetails', $product->getID(), $option->getID())); ?></span>
                                                         <?php } ?>
-    
+
                                                         <?php if ($displayType != 'radio') { ?>
                                                             <select class="store-product-option <?= $option->getIncludeVariations() ? 'store-product-variation' : ''; ?> form-control" name="po<?= $option->getID(); ?>">
                                                             <?php } ?>
@@ -259,12 +259,12 @@ if ($productsPerRow == 6) {
                                                                 if (!$optionItem->isHidden()) {
                                                                     $variation = $variationLookup[$optionItem->getID()];
                                                                     $selected = '';
-    
+
                                                                     if (!empty($variation)) {
                                                                         $firstAvailableVariation = (!$firstAvailableVariation && $variation->isSellable()) ? $variation : $firstAvailableVariation;
                                                                         $disabled = $variation->isSellable() ? '' : 'disabled="disabled" ';
                                                                         $outOfStock = $variation->isSellable() ? '' : ' (' . t('out of stock') . ')';
-    
+
                                                                         if (is_array($availableOptionsids) && in_array($optionItem->getID(), $availableOptionsids)) {
                                                                             $selected = 'selected="selected"';
                                                                         }
@@ -274,27 +274,27 @@ if ($productsPerRow == 6) {
                                                                             $firstOptionItem = false;
                                                                         }
                                                                     }
-    
+
                                                                     $optionLabel = $optionItem->getName();
                                                                     $translateHandle = 'optionValue';
-    
+
                                                                     if ($optionItem->getSelectorName()) {
                                                                         $optionLabel = $optionItem->getSelectorName();
                                                                         $translateHandle = 'optionSelectorName';
                                                                     }
-    
+
                                                             ?>
-    
+
                                                                     <?php if ($displayType == 'radio') { ?>
                                                                         <div class="radio">
                                                                             <label><input type="radio" required class="store-product-option <?= $option->getIncludeVariations() ? 'store-product-variation' : '' ?> " <?= $disabled . ($selected ? 'checked' : ''); ?> name="po<?= $option->getID(); ?>" value="<?= $optionItem->getID(); ?>" data-adjustment="<?= (float) $optionItem->getPriceAdjustment($product->getDiscountRules()); ?>" /><?= h($csm->t($optionLabel, $translateHandle, $product->getID(), $optionItem->getID())) . $outOfStock; ?>
-    
+
                                                                             </label>
                                                                         </div>
                                                                     <?php } else { ?>
                                                                         <option <?= $disabled . ' ' . $selected; ?> value="<?= $optionItem->getID(); ?>" data-adjustment="<?= (float) $optionItem->getPriceAdjustment($product->getDiscountRules()); ?>"><?= h($csm->t($optionLabel, $translateHandle, $product->getID(), $optionItem->getID())) . $outOfStock; ?></option>
                                                                     <?php } ?>
-    
+
                                                                 <?php } ?>
                                                             <?php } ?>
                                                             <?php if ($displayType != 'radio') { ?>
@@ -304,21 +304,21 @@ if ($productsPerRow == 6) {
                                                 <?php } elseif ($optionType == 'text') { ?>
                                                     <div class="store-product-option-group form-group <?= $option->getHandle(); ?>">
                                                         <label class="store-product-option-group-label"><?= h($csm->t($option->getName(), 'optionName', $product->getID(), $option->getID())); ?></label>
-    
+
                                                         <?php if ($details) { ?>
                                                             <span class="store-product-option-help-text help-block"><?= h($csm->t($details, 'optionDetails', $product->getID(), $option->getID())); ?></span>
                                                         <?php } ?>
-    
+
                                                         <input class="store-product-option-entry form-control" <?= $requiredAttr; ?> name="pt<?= $option->getID(); ?>" />
                                                     </div>
                                                 <?php } elseif ($optionType == 'textarea') { ?>
                                                     <div class="store-product-option-group form-group <?= $option->getHandle(); ?>">
                                                         <label class="store-product-option-group-label"><?= h($csm->t($option->getName(), 'optionName', $product->getID(), $option->getID())); ?></label>
-    
+
                                                         <?php if ($details) { ?>
                                                             <span class="store-product-option-help-text help-block"><?= h($csm->t($details, 'optionDetails', $product->getID(), $option->getID())); ?></span>
                                                         <?php } ?>
-    
+
                                                         <textarea class="store-product-option-entry form-control" <?= $requiredAttr; ?> name="pa<?= $option->getID(); ?>"></textarea>
                                                     </div>
                                                 <?php } elseif ($optionType == 'checkbox') { ?>
@@ -326,11 +326,11 @@ if ($productsPerRow == 6) {
                                                         <label class="store-product-option-group-label">
                                                             <input type="hidden" value="<?= t('no'); ?>" class="store-product-option-checkbox-hidden <?= $option->getHandle(); ?>" name="pc<?= $option->getID(); ?>" />
                                                             <input type="checkbox" value="<?= t('yes'); ?>" class="store-product-option-checkbox <?= $option->getHandle(); ?>" name="pc<?= $option->getID(); ?>" /> <?= h($csm->t($option->getName(), 'optionName', $product->getID(), $option->getID())); ?></label>
-    
+
                                                         <?php if ($details) { ?>
                                                             <span class="store-product-option-help-text help-block"><?= h($csm->t($details, 'optionDetails', $product->getID(), $option->getID())); ?></span>
                                                         <?php } ?>
-    
+
                                                     </div>
                                                 <?php } elseif ($optionType == 'hidden') { ?>
                                                     <input type="hidden" class="store-product-option-hidden <?= $option->getHandle(); ?>" name="ph<?= $option->getID(); ?>" />
@@ -341,16 +341,16 @@ if ($productsPerRow == 6) {
                                                 <?php } ?>
                                             <?php } ?>
                                         </div>
-    
+
                                         <input type="hidden" name="pID" value="<?= $product->getID(); ?>">
-    
+
                                         <p class="store-btn-add-to-cart-container">
                                             <button data-add-type="list" data-product-id="<?= $product->getID(); ?>" class="store-btn-add-to-cart btn btn-primary <?= ($isSellable ? '' : 'hidden'); ?> "><?= ($btnText ? h($btnText) : t("Add to Cart")); ?></button>
                                         </p>
                                         <p class="store-out-of-stock-label alert alert-warning <?= ($isSellable ? 'hidden' : ''); ?>"><?= t("Out of Stock"); ?></p>
-    
+
                                     <?php } ?>
-    
+
                                     <?php if (count($product->getOptions()) > 0) { ?>
                                         <script>
                                             <?php
@@ -359,11 +359,11 @@ if ($productsPerRow == 6) {
                                                 $product->setVariation($variation);
                                                 $product->setPriceAdjustment(0);
                                                 $imgObj = $product->getImageObj();
-    
+
                                                 if ($imgObj) {
                                                     $thumb = $communityStoreImageHelper->getThumbnail($imgObj);
                                                 }
-    
+
                                                 $varationData[$key] = [
                                                     'price' => $product->getPrice(),
                                                     'salePrice' => $product->getSalePrice(),
@@ -372,29 +372,40 @@ if ($productsPerRow == 6) {
                                                     'image' => $imgObj ? $imgObj->getRelativePath() : '',
                                                     'saleTemplate' => '<span class="store-sale-price"></span>&nbsp;' . t('was') . '&nbsp;<span class="store-original-price"></span>'
                                                 ];
-    
+
                                                 if ($isWholesale) {
                                                     $varationData[$key]['price'] = $product->getWholesalePrice();
                                                 }
                                             } ?>
-    
+
                                             var variationData = variationData || [];
                                             variationData[<?= $product->getID(); ?>] = <?= json_encode($varationData); ?>;
                                         </script>
                                     <?php } ?>
-    
+
                                 </form><!-- .product-list-item-inner -->
                             </div><!-- .product-list-item -->
-    
+
                             <!-- <?php if ($i % $productsPerRow ==  0) { ?>
                                 </div>
                                 <div class="store-product-list row store-product-list-per-row-<?php $productsPerRow ?>">
                             <?php } ?> -->
-    
+
                             <?php ++$i; ?>
                             <?php $itemActive = false; ?>
-                        <?php } // foreach ?>
+                        <?php } // foreach 
+                        ?>
                     </div><!-- .product-list -->
+
+                    <!-- PREV and NEXT  -->
+                    <a class="carousel-control-prev" href="#productistCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#productistCarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
 
                 </div> <!-- .carousel -->
 
