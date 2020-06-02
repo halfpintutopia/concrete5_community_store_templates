@@ -30,7 +30,6 @@ if ($productsPerRow == 6) {
 }
 
 ?>
-
 <div class="store-product-list-block">
     <?php if ($products) { ?>
 
