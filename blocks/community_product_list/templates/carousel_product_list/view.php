@@ -35,9 +35,7 @@ if ($productsPerRow == 6) {
     <div class="container">
         <div class="store-product-list-block">
             <?php if ($products) { ?>
-        
-                <?php if ($showSortOption) {
-                ?>
+                <?php if ($showSortOption) { ?>
                 <div class="store-product-list-sort row">
                     <div class="col-md-12 form-inline text-right pull-right">
                         <div class="form-group">
@@ -60,78 +58,70 @@ if ($productsPerRow == 6) {
                         });
                     });
                 </script>
-            <?php
-            } ?>
+                <?php } ?>
         
+                <div class="store-product-list row store-product-list-per-row-<?= $productsPerRow ?>">
         
-            <?php
+                <?php
+                $i = 1;
         
-            echo '<div class="store-product-list row store-product-list-per-row-' . $productsPerRow . '">';
+                foreach ($products as $product) {
+                    $options = $product->getOptions();
         
-            $i = 1;
+                    $variationLookup = $product->getVariationLookup();
+                    $variationData = $product->getVariationData();
+                    $availableOptionsids = $variationData['availableOptionsids'];
+                    $firstAvailableVariation = $variationData[
+                        'firstAvailableVariation'
+                    ];
+            
+                    if ($firstAvailableVariation) {
+                        $product = $firstAvailableVariation;
+                    } else {
+                        $product->setInitialVariation();
+                    }
         
-            foreach ($products as $product) {
-                $options = $product->getOptions();
+                    $product->setPriceAdjustment($variationData['priceAdjustment']);
         
-                $variationLookup = $product->getVariationLookup();
-                $variationData = $product->getVariationData();
-                $availableOptionsids = $variationData['availableOptionsids'];
-                $firstAvailableVariation = $variationData['firstAvailableVariation'];
+                    $isSellable = $product->isSellable();
         
-                if ($firstAvailableVariation) {
-                    $product = $firstAvailableVariation;
-                } else {
-                    $product->setInitialVariation();
-                }
+                    //this is done so we can get a type of active class if there's a product list on the product page
+                    if ($c->getCollectionID() == $product->getPageID()) {
+                        $activeclass = 'on-product-page';
+                    }
         
-                $product->setPriceAdjustment($variationData['priceAdjustment']);
+                    $productPage = $product->getProductPage();
         
-                $isSellable = $product->isSellable();
-        
-                //this is done so we can get a type of active class if there's a product list on the product page
-                if ($c->getCollectionID() == $product->getPageID()) {
-                    $activeclass = 'on-product-page';
-                }
-        
-                $productPage = $product->getProductPage();
-        
-                if (!$productPage || $productPage->isError() || $productPage->isInTrash()) {
-                    $productPage = false;
-                } ?>
+                    if (!$productPage || $productPage->isError() || $productPage->isInTrash()) {
+                        $productPage = false;
+                    } ?>
         
                     <div class="store-product-list-item <?= $columnClass; ?> <?= $activeclass; ?>">
                         <form id="store-form-add-to-cart-list-<?= $product->getID(); ?>" data-product-id="<?= $product->getID(); ?>">
                             <?= $token->output('community_store'); ?>
-                            <?php if ($showName) {
-                                ?>
+                            <?php if ($showName) { ?>
                                 <h2 class="store-product-list-name"><?= $csm->t($product->getName(), 'productName', $product->getID()); ?></h2>
-                                <?php
-                            } ?>
+                            <?php } ?>
+
                             <?php
                             $imgObj = $product->getImageObj();
                             if (is_object($imgObj)) {
-                                $thumb = $communityStoreImageHelper->getThumbnail($imgObj); ?>
+                                $thumb = $communityStoreImageHelper->getThumbnail($imgObj);
+                                ?>
                                 <p class="store-product-list-thumbnail">
-                                    <?php if ($showQuickViewLink) {
-                                        ?>
+                                    <?php if ($showQuickViewLink) { ?>
                                         <a class="store-product-quick-view" data-product-id="<?= $product->getID(); ?>" data-locale="<?= $locale; ?>" href="#">
                                             <img src="<?= $thumb->src; ?>" class="img-responsive">
                                         </a>
-                                        <?php
-                                    } elseif ($showPageLink && $productPage) {
-                                        ?>
+                                    <?php } elseif ($showPageLink && $productPage) { ?>
                                         <a href="<?= \Concrete\Core\Support\Facade\Url::to($productPage); ?>">
                                             <img src="<?= $thumb->src; ?>" class="img-responsive">
                                         </a>
-                                        <?php
-                                    } else {
-                                        ?>
+                                    <?php } else { ?>
                                         <img src="<?= $thumb->src; ?>" class="img-responsive">
-                                        <?php
-                                    } ?>
+                                    <?php } ?>
                                 </p>
-                                <?php
-                            }// if is_obj?>
+                            <?php } // if is_obj ?>
                             <?php if ($showPrice && !$product->allowCustomerPrice()) {
                                 $salePrice = $product->getSalePrice();
                                 $price = $product->getPrice();
@@ -148,58 +138,51 @@ if ($productsPerRow == 6) {
                                     } else {
                                         $formattedPrice = $product->getFormattedPrice();
                                         echo $formattedPrice;
-                                    } ?>
+                                    }
+                                    ?>
                                 </p>
-                                <?php
-                            } ?>
+                            <?php } ?>
         
-                            <?php if ($product->allowCustomerPrice()) {
-                                ?>
+                            <?php if ($product->allowCustomerPrice()) { ?>
                                 <div class="store-product-customer-price-entry form-group">
                                     <?php
                                     $pricesuggestions = $product->getPriceSuggestionsArray();
                                     if (!empty($pricesuggestions)) {
                                         ?>
                                         <p class="store-product-price-suggestions"><?php
-                                            foreach ($pricesuggestions as $suggestion) {
-                                                ?>
-                                                <a href="#" class="store-price-suggestion btn btn-default btn-sm" data-suggestion-value="<?= $suggestion; ?>" data-add-type="list"><?= Config::get('community_store.symbol') . $suggestion; ?></a>
-                                                <?php
-                                            } ?>
+                                        foreach ($pricesuggestions as $suggestion) {
+                                            ?>
+                                            <a href="#" class="store-price-suggestion btn btn-default btn-sm" data-suggestion-value="<?= $suggestion; ?>" data-add-type="list"><?= Config::get('community_store.symbol') . $suggestion; ?></a>
+                                        <?php } ?>
                                         </p>
                                         <label for="customerPrice" class="store-product-customer-price-label"><?= t('Enter Other Amount'); ?></label>
-                                        <?php
-                                    } else {
-                                        ?>
+                                    <?php } else { ?>
                                         <label for="customerPrice" class="store-product-customer-price-label"><?= t('Amount'); ?></label>
-                                        <?php
-                                    } ?>
+                                    <?php } ?>
                                     <?php $min = $product->getPriceMinimum(); ?>
                                     <?php $max = $product->getPriceMaximum(); ?>
                                     <div class="input-group col-md-6 col-sm-6 col-xs-6">
                                         <div class="input-group-addon"><?= Config::get('community_store.symbol'); ?></div>
                                         <input type="number" <?= $min ? 'min="' . $min . '"' : ''; ?>  <?= $max ? 'max="' . $max . '"' : ''; ?> step="0.01" class="store-product-customer-price-entry-field form-control" value="<?= $product->getPrice(); ?>" name="customerPrice"/>
                                     </div>
-                                    <?php if ($min >= 0 || $max > 0) {
-                                        ?>
+                                    <?php if ($min >= 0 || $max > 0) { ?>
                                         <span class="store-min-max help-block">
-                                                <?php
-                                                if (!is_null($min)) {
-                                                    echo t('minimum') . ' ' . Config::get('community_store.symbol') . $min;
+                                            <?php
+                                            if (!is_null($min)) {
+                                                echo t('minimum') . ' ' . Config::get('community_store.symbol') . $min;
+                                            }
+    
+                                            if (!is_null($max)) {
+                                                if ($min >= 0) {
+                                                    echo ', ';
                                                 }
-        
-                                                if (!is_null($max)) {
-                                                    if ($min >= 0) {
-                                                        echo ', ';
-                                                    }
-                                                    echo t('maximum') . ' ' . Config::get('community_store.symbol') . $max;
-                                                } ?>
-                                                </span>
-                                        <?php
-                                    } ?>
+                                                echo t('maximum') . ' ' . Config::get('community_store.symbol') . $max;
+                                            } 
+                                            ?>
+                                        </span>
+                                    <?php } ?>
                                 </div>
-                                <?php
-                            } ?>
+                            <?php } ?>
         
         
                             <?php if ($showDescription) {
