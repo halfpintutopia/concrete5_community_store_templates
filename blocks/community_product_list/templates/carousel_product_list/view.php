@@ -22,7 +22,7 @@ if ($productsPerRow == 3) {
 }
 
 if ($productsPerRow == 4) {
-    $columnClass = 'col-12 col-md-4';
+    $columnClass = 'col-12 col-md-3';
 }
 
 if ($productsPerRow == 6) {
@@ -98,7 +98,7 @@ if ($productsPerRow == 6) {
                                 $productPage = false;
                             } ?>
 
-                            <div class="carousel-item store-product-list-item <?= $columnClass; ?> <?= $activeclass; ?> <?= $itemActive ? 'active' : '' ?>">
+                            <div class="carousel-item store-product-list-item <?= $columnClass; ?> <?= $activeclass; ?> <?= $itemActive ? 'active' : '' ?>" role="option">
                                 <form id="store-form-add-to-cart-list-<?= $product->getID(); ?>" data-product-id="<?= $product->getID(); ?>">
                                     <?= $token->output('community_store'); ?>
                                     <?php if ($showName) { ?>
@@ -413,7 +413,7 @@ if ($productsPerRow == 6) {
                     jQuery(function($) {
                         $('.multi-item-carousel').on('slide.bs.carousel', function(e) {
                             var $e = $(e.relatedTarget),
-                                itemsPerSlide = 3,
+                                itemsPerSlide = 4,
                                 totalItems = $('.carousel-item', this).length,
                                 $itemsContainer = $('.carousel-inner', this),
                                 it = itemsPerSlide - (totalItems - $e.index());
