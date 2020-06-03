@@ -1,62 +1,87 @@
-.store-original-price {
-  text-decoration: line-through;
+/* beginning of one item carousel */
+.multi-item-carousel {
+ margin-bottom:5rem
 }
-.store-product-list-sort {
-  margin-top: 15px;
+.multi-item-carousel .carousel-inner {
+ padding-top:.5rem;
+ padding-bottom:1rem
 }
-@media (min-width: 768px) {
-  .multi-item-carousel .carousel-inner .carousel-item {
-    margin-right: inherit;
-  }
-  .multi-item-carousel .carousel-inner .carousel-item.active + .carousel-item,
-  .multi-item-carousel .carousel-inner .carousel-item.active + .carousel-item + .carousel-item,
-  .multi-item-carousel .carousel-inner .carousel-item.active+.carousel-item+.carousel-item+.carousel-item {
-    display: block;
-  }
-  .multi-item-carousel .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left),
-  .multi-item-carousel .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item,
-  .multi-item-carousel .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item + .carousel-item,
-  .multi-item-carousel .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left)+.carousel-item+.carousel-item+.carousel-item {
-    transition: none;
-  }
-  .multi-item-carousel .carousel-inner .carousel-item.active+.carousel-item+.carousel-item+.carousel-item+.carousel-item {
-    position: absolute;
-    top: 0;
-    right: -25%;
-    z-index: -1;
-    display: block;
-    visibility: visible;
-  }
-  .multi-item-carousel .carousel-inner .carousel-item-next,
-  .multi-item-carousel .carousel-inner .carousel-item-prev {
-    position: relative;
-    transform: translate3d(0, 0, 0);
-  }
-  .multi-item-carousel .carousel-inner .carousel-item-prev.carousel-item-right {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    display: block;
-    visibility: visible;
-  }
-  .multi-item-carousel .active.carousel-item-left + .carousel-item-next.carousel-item-left,
-  .multi-item-carousel .carousel-item-next.carousel-item-left + .carousel-item,
-  .multi-item-carousel .carousel-item-next.carousel-item-left + .carousel-item + .carousel-item,
-  .multi-item-carousel .carousel-item-next.carousel-item-left + .carousel-item + .carousel-item + .carousel-item,
-  .multi-item-carousel .carousel-item-next.carousel-item-left+.carousel-item+.carousel-item+.carousel-item+.carousel-item {
-    position: relative;
-    transform: translate3d(-100%, 0, 0);
-    visibility: visible;
-  }
-  .multi-item-carousel .active.carousel-item-right + .carousel-item-prev.carousel-item-right,
-  .multi-item-carousel .carousel-item-prev.carousel-item-right + .carousel-item,
-  .multi-item-carousel .carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item,
-  .multi-item-carousel .carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item + .carousel-item,
-  .multi-item-carousel .carousel-item-prev.carousel-item-right+.carousel-item+.carousel-item+.carousel-item+.carousel-item {
-    position: relative;
-    transform: translate3d(100%, 0, 0);
-    display: block;
-    visibility: visible;
-  }
+.multi-item-carousel .carousel-inner .carousel-item.active,
+.multi-item-carousel .carousel-item-next,
+.multi-item-carousel .carousel-item-prev {
+ display:block
+}
+.multi-item-carousel .carousel-inner .carousel-item.active,
+.multi-item-carousel .carousel-inner .carousel-item-next,
+.multi-item-carousel .carousel-inner .carousel-item-prev {
+ display:-webkit-box;
+ display:-ms-flexbox;
+ display:flex
+}
+.multi-item-carousel .carousel-inner .carousel-item-right.active,
+.multi-item-carousel .carousel-inner .carousel-item-next {
+ -webkit-transform:translateX(100%);
+ transform:translateX(100%)
+}
+@media(min-width:768px) {
+ .multi-item-carousel .carousel-inner .carousel-item-right.active,
+ .multi-item-carousel .carousel-inner .carousel-item-next {
+  -webkit-transform:translateX(33%);
+  transform:translateX(33%)
+ }
+}
+.multi-item-carousel .carousel-inner .carousel-item-left.active,
+.multi-item-carousel .carousel-inner .carousel-item-prev {
+ -webkit-transform:translateX(-100%);
+ transform:translateX(-100%)
+}
+@media(min-width:768px) {
+ .multi-item-carousel .carousel-inner .carousel-item-left.active,
+ .multi-item-carousel .carousel-inner .carousel-item-prev {
+  -webkit-transform:translateX(-33%);
+  transform:translateX(-33%)
+ }
+}
+.multi-item-carousel .carousel-inner .carousel-item-right,
+.multi-item-carousel .carousel-inner .carousel-item-left {
+ -webkit-transform:translateX(0);
+ transform:translateX(0)
+}
+.multi-item-carousel .carousel-indicators li {
+ width:1.25rem;
+ max-width:1.25rem;
+ height:1.25rem;
+ margin-bottom:-3.75rem;
+ background-color:#4285f4
+}
+.multi-item-carousel .carousel-indicators .active {
+ width:1.56rem;
+ max-width:1.56rem;
+ height:1.56rem;
+ background-color:#4285f4;
+ border-radius:50%
+}
+.multi-item-carousel .controls-top {
+ margin-bottom:1.88rem;
+ text-align:center
+}
+.multi-item-carousel .controls-top .btn-floating {
+ background:#4285f4
+}
+.multi-item-carousel .carousel-indicators {
+ margin-bottom:-1em
+}
+.multi-item-carousel .card-cascade.narrower {
+ margin-top:1.25rem;
+ margin-bottom:.3rem
+}
+@media(min-width:768px) {
+ .multi-item-carousel [class*="col-"] {
+  float:left
+ }
+}
+@media only screen and (max-width:992px) {
+ .multi-item-carousel .carousel-indicators li {
+  margin-bottom:-1.88rem
+ }
 }
