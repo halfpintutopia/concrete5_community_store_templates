@@ -14,11 +14,11 @@ $c = \Concrete\Core\Page\Page::getCurrentPage();
 $columnClass = 'col-md-12';
 
 if ($productsPerRow == 2) {
-    $columnClass = 'col-md-6';
+    $columnClass = 'col-12 col-md-6';
 }
 
 if ($productsPerRow == 3) {
-    $columnClass = 'col-md-4';
+    $columnClass = 'col-12 col-md-4';
 }
 
 if ($productsPerRow == 4) {
@@ -26,7 +26,7 @@ if ($productsPerRow == 4) {
 }
 
 if ($productsPerRow == 6) {
-    $columnClass = 'col-md-2';
+    $columnClass = 'col-12 col-md-2';
 }
 
 ?>
@@ -422,7 +422,9 @@ if ($productsPerRow == 6) {
                             }
                             next.children(':first-child').clone().appendTo($(this));
 
-                            for (var i = 0; i < 1; i++) {
+                            var items = <?= $productsPerRow ?> + 1;
+
+                            for (var i = 0; i < items; i++) {
                                 next = next.next();
                                 if (!next.length) {
                                     next = $(this).siblings(':first');
