@@ -69,6 +69,9 @@ if ($productsPerRow == 6) {
             echo '<div class="store-product-list row store-product-list-per-row-' . $productsPerRow . '">';
         
             $i = 1;
+            ?>
+            <div class="card-deck">
+            <?php
         
             foreach ($products as $product) {
                 $options = $product->getOptions();
@@ -99,7 +102,7 @@ if ($productsPerRow == 6) {
                     $productPage = false;
                 } ?>
         
-                    <div class="store-product-list-item <?= $columnClass; ?> <?= $activeclass; ?>">
+                    <div class="store-product-list-item <?= $columnClass; ?> <?= $activeclass; ?> card">
                         <form id="store-form-add-to-cart-list-<?= $product->getID(); ?>" data-product-id="<?= $product->getID(); ?>">
                             <?= $token->output('community_store'); ?>
                             <?php if ($showName) {
@@ -452,6 +455,9 @@ if ($productsPerRow == 6) {
                 ++$i;
             }// foreach
             echo "</div><!-- .product-list -->";
+            ?>
+            </div>
+            <?php
         
             if ($showPagination) {
                 if ($paginator->getTotalPages() > 1) {
